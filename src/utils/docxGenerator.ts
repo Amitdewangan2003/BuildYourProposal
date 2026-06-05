@@ -98,11 +98,9 @@ export async function generateDocx(
             type: "png",
           }),
         ],
-        // Zero out all paragraph spacing so image sits flush at page top
         spacing: { before: 0, after: 0, line: 240, lineRule: "auto" },
       }),
     );
-    // Doc number + date row overlaid via a separate paragraph
     headerChildren.push(
       new Paragraph({
         children: [
@@ -130,6 +128,19 @@ export async function generateDocx(
           new ImageRun({
             data: footerImgBuf,
             transformation: { width: A4_WIDTH_PX, height: footerHeight },
+            // FIX 2: Make footer image floating so it escapes the page margins
+            // and spans the full page width, matching the header behaviour.
+            floating: {
+              horizontalPosition: {
+                relative: HorizontalPositionRelativeFrom.PAGE,
+                align: HorizontalPositionAlign.LEFT,
+              },
+              verticalPosition: {
+                relative: VerticalPositionRelativeFrom.PAGE,
+                align: VerticalPositionAlign.BOTTOM,
+              },
+              behindDocument: true,
+            },
             type: "png",
           }),
         ],
@@ -275,9 +286,11 @@ export async function generateDocx(
             margin: {
               top: convertInchesToTwip(0.8),
               bottom: convertInchesToTwip(0.8),
-              left: convertInchesToTwip(0), // ← zero: image spans full page width
-              right: convertInchesToTwip(0), // ← zero: nothing clipped on right
-              // header/footer distance from page edge (in twips, ~0 = flush)
+              // FIX 1: Restore 1-inch side margins so body text and tables are
+              // no longer flush against the page edges. The header/footer images
+              // are floating (relative to PAGE), so they still span full width.
+              left: convertInchesToTwip(1),
+              right: convertInchesToTwip(1),
               header: 0,
               footer: 0,
             },
