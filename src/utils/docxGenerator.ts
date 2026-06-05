@@ -174,7 +174,7 @@ export async function generateDocx(
         }),
       ],
       alignment: AlignmentType.CENTER,
-      spacing: { after: 160 },
+      spacing: { before: 400, after: 160 },
     }),
     new Paragraph({
       children: [
