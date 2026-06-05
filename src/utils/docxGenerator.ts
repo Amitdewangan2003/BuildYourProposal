@@ -13,6 +13,10 @@ import {
   Footer,
   ImageRun,
   convertInchesToTwip,
+  HorizontalPositionRelativeFrom,
+  HorizontalPositionAlign,
+  VerticalPositionRelativeFrom,
+  VerticalPositionAlign,
 } from "docx";
 import type { Section, DocHeader } from "../types/document";
 
@@ -80,6 +84,17 @@ export async function generateDocx(
           new ImageRun({
             data: headerImgBuf,
             transformation: { width: A4_WIDTH_PX, height: headerHeight },
+            floating: {
+              horizontalPosition: {
+                relative: HorizontalPositionRelativeFrom.PAGE,
+                align: HorizontalPositionAlign.LEFT,
+              },
+              verticalPosition: {
+                relative: VerticalPositionRelativeFrom.PAGE,
+                align: VerticalPositionAlign.TOP,
+              },
+              behindDocument: true,
+            },
             type: "png",
           }),
         ],
@@ -101,7 +116,7 @@ export async function generateDocx(
           new TextRun({ text: docHeader.docDate, size: 18, color: "d8e2ee" }),
         ],
         alignment: AlignmentType.RIGHT,
-        spacing: { before: 0, after: 0 },
+        spacing: { before: headerHeight * 6, after: 0 },
       }),
     );
   }
@@ -258,8 +273,8 @@ export async function generateDocx(
         properties: {
           page: {
             margin: {
-              top: convertInchesToTwip(1.2),
-              bottom: convertInchesToTwip(1.1),
+              top: convertInchesToTwip(0.8),
+              bottom: convertInchesToTwip(0.8),
               left: convertInchesToTwip(0), // ← zero: image spans full page width
               right: convertInchesToTwip(0), // ← zero: nothing clipped on right
               // header/footer distance from page edge (in twips, ~0 = flush)

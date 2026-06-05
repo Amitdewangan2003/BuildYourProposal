@@ -131,8 +131,8 @@ export default function App() {
      * 40mm  ≈ rendered height of the footer image at A4 width
      * Adjust these values if your images are taller/shorter.
      */
-    const HEADER_H = "72mm";
-    const FOOTER_H = "40mm";
+    const HEADER_H = "80px";
+    const FOOTER_H = "100px";
 
     const spacerTableOpen = `
       <table class="print-spacer-table" style="
